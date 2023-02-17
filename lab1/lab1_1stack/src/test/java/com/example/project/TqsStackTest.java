@@ -1,5 +1,6 @@
 package com.example.project;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,11 @@ class TqsStackTest {
     @BeforeEach
     void setUp() {
          stack = new TqsStack<>();
+    }
+
+    @AfterEach
+    void tearDown() {
+        stack = null;
     }
 
     @Test
