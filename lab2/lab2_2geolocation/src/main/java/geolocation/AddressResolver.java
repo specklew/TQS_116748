@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Formatter;
 import java.util.Locale;
@@ -22,12 +23,12 @@ public class AddressResolver {
         this.httpClient = httpClient;
     }
 
-    public Optional<Address> findAddressForLocation(double latitude, double longtitude) throws URISyntaxException, ParseException {
+    public Optional<Address> findAddressForLocation(double latitude, double longtitude) throws URISyntaxException, ParseException, IOException {
 
         String location = (new Formatter().format(Locale.US, "%.6f, %.6f", latitude, longtitude).toString());
 
         URIBuilder uriBuilder = new URIBuilder(MAPQUESTAPI_GEOCODING);
-        uriBuilder.addParameter("key", "temporary_test_key"); //TODO: If needed add the key.
+        uriBuilder.addParameter("key", "CbzX0NdEIyYHSecAsHZ2dMAJkDpAoIzq");
         uriBuilder.addParameter("location", location);
 
         String response = httpClient.doHttpGet(uriBuilder.build().toString());

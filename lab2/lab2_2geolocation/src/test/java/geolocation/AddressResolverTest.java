@@ -1,6 +1,5 @@
 package geolocation;
 
-import org.hamcrest.MatcherAssert;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,9 +8,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -148,41 +149,23 @@ class AddressResolverTest {
             null));
 
     @Test
-    void testFindAddressForCorrectLocation() {
+    void testFindAddressForCorrectLocation() throws URISyntaxException, ParseException, IOException {
         when(httpClient.doHttpGet(any(String.class))).thenReturn(exampleResponse);
+        assertThat(addressResolver.findAddressForLocation(30.333472, -81.470448), equalTo(address));
 
-        try {
-            MatcherAssert.assertThat(addressResolver.findAddressForLocation(30.333472, -81.470448), equalTo(address));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
-    void testFindAddressForIncorrectLocation() {
+    void testFindAddressForIncorrectLocation() throws IOException, URISyntaxException, ParseException {
         when(httpClient.doHttpGet(any(String.class))).thenReturn(exampleEmpty);
+        assertThat(addressResolver.findAddressForLocation(0.0, 0.0), equalTo(Optional.empty()));
 
-        try {
-            MatcherAssert.assertThat(addressResolver.findAddressForLocation(0.0, 0.0), equalTo(Optional.empty()));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
-    void testFindAddressForFailedRequest() {
+    void testFindAddressForFailedRequest() throws IOException, URISyntaxException, ParseException {
         when(httpClient.doHttpGet(any(String.class))).thenReturn(exampleFailed);
+        assertThat(addressResolver.findAddressForLocation(0.0, 0.0), equalTo(Optional.empty()));
 
-        try {
-            MatcherAssert.assertThat(addressResolver.findAddressForLocation(0.0, 0.0), equalTo(Optional.empty()));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
